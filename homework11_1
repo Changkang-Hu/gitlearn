@@ -1,0 +1,331 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <ctype.h>
+/*   删除左边的空格   */
+char * del_left_trim(char *str) {
+    assert(str != NULL);
+    for (;*str != '\0' && isblank(*str) ; ++str);
+    return str;
+}
+/*   删除两边的空格   */
+char * del_both_trim(char * str) {
+    char *p;
+    char * szOutput;
+    szOutput = del_left_trim(str);
+    for (p = szOutput + strlen(szOutput) - 1; p >= szOutput && isblank(*p);
+            --p);
+    *(++p) = '\0';
+    return szOutput;
+}
+/*主函数*/
+int main(int argc, char **argv) {
+    FILE * fp = NULL;
+   /*打开配置文件a.txt*/
+    fp = fopen("config.txt", "r");
+   /*緩沖區*/
+    char buf[64];
+    char s[64];
+    /*分割符*/
+    char * delim = "=";
+    char * p;
+    char ch;
+     while (!feof(fp)) {
+        if ((p = fgets(buf, sizeof(buf), fp)) != NULL) {
+            strcpy(s, p);
+            ch=del_left_trim(s)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if (ch == '#' || isblank(ch) || ch=='\n')
+                continue;
+          /*分割字符串*/
+            p=strtok(s, delim);
+            if(p)
+            printf("%s", del_both_trim(p));
+            while ((p = strtok(NULL, delim)))
+            printf("%s ", del_both_trim(p));
+            printf("\n");
+        }
+    }
+    return 0;
+}
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <ctype.h>
+/*   删除左边的空格   */
+char * del_left_trim(char *str) {
+	assert(str != NULL);
+    for (;*str != '\0' && isblank(*str) ; ++str);
+    return str;
+}
+/*   删除两边的空格   */
+char * del_both_trim(char * str) {
+    char *p;
+    char * szOutput;
+    szOutput = del_left_trim(str);
+    for (p = szOutput + strlen(szOutput) - 1; p >= szOutput && isblank(*p);
+            --p);
+    *(++p) = '\0';
+    return szOutput;
+}
+	int counter(char *arr)
+	{
+		int count = 0;
+		for (; *arr != '\0';arr++)
+		{
+			if (*arr == '=') count++;
+		}
+		return count;
+	}
+/*主函数*/
+int main(int argc, char **argv) {
+    FILE * fp = NULL;
+   /*打开配置文件a.txt*/
+    fp = fopen("config.txt", "r");
+    if(!fp)
+    {
+        printf("can't open file\n");
+        return false;
+    }
+   /*緩沖區*/
+    char buf[50];
+    char s[50];
+    /*分割符*/
+    char * delim = "=";
+    char * p_l;
+    char *p_r;
+    char ch;
+     while (!feof(fp)) {
+        if ((p_l = fgets(buf, 50, fp)) != NULL) {
+            strcpy(s, p_l);
+            ch=del_left_trim(s)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if (ch == '#' || isblank(ch) || ch=='\n')
+                continue;
+            if(!(counter(s)==1))
+            {printf("该行配置文件格式有问题！\n");
+			continue; 
+			}
+            if (ch == '=') 
+			{
+			printf("文件该行配置有误，缺乏相应的Key值\n");
+			continue;} 
+          /*分割字符串*/
+            p_l=strtok(s, delim);
+            p_r = strtok(NULL, delim);
+            char sh = del_left_trim(p_r)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if ( isblank(sh) || sh=='\n')
+            {printf("文件该行配置有误，缺乏相应的Value值\n");
+            continue;
+			}
+            else{
+            	printf("%s : ", del_both_trim(p_l));
+            	printf("%s", del_both_trim(p_r));
+			} 
+        }
+    }
+    return 0;
+}
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <ctype.h>
+/*   删除左边的空格   */
+char * del_left_trim(char *str) {
+	assert(str != NULL);
+    for (;*str != '\0' && isblank(*str) ; ++str);
+    return str;
+}
+/*   删除两边的空格   */
+char * del_both_trim(char * str) {
+    char *p;
+    char * szOutput;
+    szOutput = del_left_trim(str);
+    for (p = szOutput + strlen(szOutput) - 1; p >= szOutput && isblank(*p);
+            --p);
+    *(++p) = '\0';
+    return szOutput;
+}
+	int counter(char *arr)
+	{
+		int count = 0;
+		for (; *arr != '\0';arr++)
+		{
+			if (*arr == '=') count++;
+		}
+		return count;
+	}
+/*主函数*/
+int main(int argc, char **argv) {
+    FILE * fp = NULL;
+   /*打开配置文件a.txt*/
+    fp = fopen("config.txt", "r");
+    if(!fp)
+    {
+        printf("can't open file\n");
+        return false;
+    }
+   /*緩沖區*/
+    char buf[50];
+    char s[50];
+    /*分割符*/
+    char * delim = "=";
+    char * p_l;
+    char *p_r;
+    char ch;
+     while (!feof(fp)) {
+        if ((p_l = fgets(buf, 50, fp)) != NULL) {
+            strcpy(s, p_l);
+            ch=del_left_trim(s)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if (ch == '#' || ch == '\0' || ch=='\n')
+                continue;
+            if(!(counter(s)==1))
+            {printf("该行配置文件格式有问题！\n");
+			continue; 
+			}
+            if (ch == '=') 
+			{
+			printf("文件该行配置有误，缺乏相应的Key值\n");
+			continue;} 
+          /*分割字符串*/
+            p_l=strtok(s, delim);
+            p_r = strtok(NULL, delim);
+            char sh = del_left_trim(p_r)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if ( sh =='\0' || sh=='\n')
+            {printf("文件该行配置有误，缺乏相应的Value值\n");
+            continue;
+			}
+            else{
+            	printf("%s : ", del_both_trim(p_l));
+            	printf("%s", del_both_trim(p_r));
+			} 
+        }
+    }
+    fclose(fp);
+    return 0;
+}
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <ctype.h>
+/*   删除左边的空格   */
+char * del_left_trim(char *str) {
+	assert(str != NULL);
+    for (;*str != '\0' && isblank(*str) ; ++str);
+    return str;
+}
+/*   删除两边的空格   */
+char * del_both_trim(char * str) {
+    char *p;
+    char * szOutput;
+    szOutput = del_left_trim(str);
+    for (p = szOutput + strlen(szOutput) - 1; p >= szOutput && isblank(*p);
+            --p);
+    *(++p) = '\0';
+    return szOutput;
+}
+	int counter(char *arr)
+	{
+		int count = 0;
+		for (; *arr != '\0';arr++)
+		{
+			if (*arr == '=') count++;
+		}
+		return count;
+	}
+/*主函数*/
+int main(int argc, char **argv) {
+    FILE * fp = NULL;
+   /*打开配置文件a.txt*/
+    fp = fopen("config.txt", "r");
+    if(!fp)
+    {
+        printf("can't open file\n");
+        return false;
+    }
+   /*緩沖區*/
+    char buf[50];
+    char s[50];
+    /*分割符*/
+    char * delim = "=";
+    char * p_l;
+    char *p_r;
+    char ch;
+    int rows=0;
+    while (!feof(fp)) {
+    	if ((p_l = fgets(buf, 50, fp)) != NULL) {
+            strcpy(s, p_l);
+            ch=del_left_trim(s)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if (ch == '#' || ch == '\0' || ch=='\n')
+                continue;
+            if(!(counter(s)==1))
+            {printf("该行配置文件格式有问题！\n");
+			break; 
+			}
+            if (ch == '=') 
+			{
+			printf("文件该行配置有误，缺乏相应的Key值\n");
+			break;} 
+          /*分割字符串*/
+            p_l=strtok(s, delim);
+            p_r = strtok(NULL, delim);
+            char sh = del_left_trim(p_r)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if ( sh =='\0' || sh=='\n')
+            {printf("文件该行配置有误，缺乏相应的Value值\n");
+            break;
+			}
+            else{
+            	rows++;
+			} 
+        }
+    }
+    fclose(fp);
+//    FILE * fp = NULL;
+   /*打开配置文件a.txt*/
+    fp = fopen("config.txt", "r");
+    char **a; 
+    int i = 0;
+    a = (char**)malloc(sizeof(char*)*rows*2);//为二维数组分配行 
+    while (!feof(fp)) {
+    	if ((p_l = fgets(buf, 50, fp)) != NULL) {
+            strcpy(s, p_l);
+            ch=del_left_trim(s)[0];
+           /*判断注释 空行，如果是就直接下次循环*/
+            if (ch == '#' || ch == '\0' || ch=='\n')
+                continue;
+          /*分割字符串*/
+            p_l=strtok(s, delim);
+            p_r = strtok(NULL, delim);
+            a[i] = (char*)malloc(sizeof(char)*(strlen(del_both_trim(p_l))+1)); 
+            a[i] = del_both_trim(p_l);
+            a[i++]=(char*)malloc(sizeof(char)*(strlen(del_both_trim(p_r))+1)); 
+            a[i] = del_both_trim(p_r);
+            i++;
+           /*判断注释 空行，如果是就直接下次循环*/
+        }
+    }
+    for (int j =0 ;j < i; j++)
+    {
+    	printf("%s\n", a[j]);
+	}
+//        
+    free (a);
+    fclose(fp);
+    return 0;
+}
